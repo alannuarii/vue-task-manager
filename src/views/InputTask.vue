@@ -18,11 +18,11 @@
             <div class="row mb-4">
               <label class="col-sm-3 col-form-label">Executor</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="post.executor"
-                />
+                <select class="form-select" v-model="post.executor">
+                  <option v-for="user in users.list" :value="user.name">
+                    {{ user.name }}
+                  </option>
+                </select>
               </div>
             </div>
             <div class="row mb-4">
@@ -38,12 +38,7 @@
             <div class="row mb-4">
               <label class="col-sm-3 col-form-label">Source (Optional)</label>
               <div class="col-sm-9">
-                <input
-                  type="file"
-                  class="form-control"
-                  ref="file"
-                  @change="fileUpload"
-                />
+                <input type="file" class="form-control" ref="file" />
               </div>
             </div>
             <div class="row mb-4">
@@ -79,7 +74,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import Main from "../components/layouts/Main.vue";
@@ -88,36 +83,35 @@ const router = useRouter();
 
 const post = reactive({
   taskName: "",
-  executor: "",
+  executor: null,
   datetime: "",
   notes: "",
 });
 
+const users = reactive({
+  list: [{}],
+});
+
 const file = ref();
 
-const fileUpload = () => {
-  return file.value.files[0];
-};
+// const fileUpload = () => {
+//   console.log(file.value.files[0]);
+//   return file.value.files[0];
+// };
 
 const submitTask = () => {
-  let source = new FormData();
-  source.append("source", fileUpload());
+  const formData = new FormData();
+  formData.append("task_name", post.taskName);
+  formData.append("executor", post.executor);
+  formData.append("time_finish", post.datetime);
+  formData.append("notes", post.notes);
+  formData.append("source", file.value.files[0]);
   axios
-    .post(
-      "http://localhost:3000/input",
-      {
-        task_name: post.taskName,
-        executor: post.executor,
-        target_finish: post.datetime,
-        notes: post.notes,
-        source,
+    .post("http://localhost:3000/input", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
+    })
     .then((result) => {
       console.log(result);
       router.push({
@@ -126,7 +120,22 @@ const submitTask = () => {
     })
     .catch((error) => {
       console.log(error);
-      console.log(fileUpload());
     });
 };
+
+const getUsers = () => {
+  axios
+    .get("http://localhost:3000/user")
+    .then((result) => {
+      users.list = result.data.data;
+      console.log(users.list);
+    })
+    .catch((error) => {
+      users.list = error.response.data.message;
+    });
+};
+
+onMounted(() => {
+  getUsers();
+});
 </script>
