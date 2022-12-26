@@ -37,7 +37,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import axios from "axios";
-import Alert from "../../components/Alert.vue";
+// import Alert from "../../components/Alert.vue";
 
 const post = reactive({
   name: "",
