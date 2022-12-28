@@ -18,6 +18,7 @@
           :item="item"
           :icon="icons[index]"
           :link="links[index]"
+          :class="links[index] === pathname ? 'active' : ''"
         ></SidebarItem>
       </ul>
     </div>
@@ -32,6 +33,8 @@ import SidebarItem from "./childs/SidebarItem.vue";
 const items = ref(["Home", "Input Task", "Completed Task"]);
 const icons = ref(["bi-house-door", "bi-vr", "bi-check2-circle"]);
 const links = ref(["/", "/input", "/login"]);
+
+const pathname = location.pathname;
 </script>
 
 <style scoped>

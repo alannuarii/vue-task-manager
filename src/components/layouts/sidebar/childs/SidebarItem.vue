@@ -21,4 +21,14 @@ const props = defineProps({
 .nav-link {
   cursor: pointer;
 }
+.active {
+  background-color: #ced4da;
+  border-radius: 0 30px 30px 0;
+}
+li {
+  transition: ease-in-out 0.3s;
+}
+li:hover {
+  font-weight: 500;
+}
 </style>

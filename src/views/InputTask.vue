@@ -18,8 +18,12 @@
             <div class="row mb-4">
               <label class="col-sm-3 col-form-label">Executor</label>
               <div class="col-sm-9">
-                <select class="form-select" v-model="post.executor">
-                  <option v-for="user in users.list" :value="user.name">
+                <select class="form-select rounded-0" v-model="post.index">
+                  <option
+                    v-for="(user, index) in users.list"
+                    :key="index"
+                    :value="index"
+                  >
                     {{ user.name }}
                   </option>
                 </select>
@@ -36,7 +40,9 @@
               </div>
             </div>
             <div class="row mb-4">
-              <label class="col-sm-3 col-form-label">Source (Optional)</label>
+              <label class="col-sm-3 col-form-label"
+                >Attachment (Optional)</label
+              >
               <div class="col-sm-9">
                 <input type="file" class="form-control" ref="file" />
               </div>
@@ -83,7 +89,7 @@ const router = useRouter();
 
 const post = reactive({
   taskName: "",
-  executor: null,
+  index: "",
   datetime: "",
   notes: "",
 });
@@ -102,10 +108,11 @@ const file = ref();
 const submitTask = () => {
   const formData = new FormData();
   formData.append("task_name", post.taskName);
-  formData.append("executor", post.executor);
+  formData.append("executor", users.list[post.index].kode_task);
   formData.append("time_finish", post.datetime);
   formData.append("notes", post.notes);
-  formData.append("source", file.value.files[0]);
+  formData.append("user_id", users.list[post.index].id_user);
+  formData.append("attachment", file.value.files[0]);
   axios
     .post("http://localhost:3000/input", formData, {
       headers: {
@@ -132,6 +139,7 @@ const getUsers = () => {
     })
     .catch((error) => {
       users.list = error.response.data.message;
+      console.log(users.list)
     });
 };
 
