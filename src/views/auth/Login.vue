@@ -6,15 +6,25 @@
           <div class="card p-3">
             <form @submit.prevent="login">
               <div class="input-group input-group-lg mb-1">
-                <span class="input-group-text" id="inputGroup-sizing-default"><i class="bi-envelope-at"></i></span>
+                <span class="input-group-text" id="inputGroup-sizing-default"
+                  ><i class="bi-envelope-at"></i
+                ></span>
                 <input type="email" class="form-control" v-model="post.email" />
               </div>
               <div class="input-group input-group-lg">
-                <span class="input-group-text" id="inputGroup-sizing-default"><i class="bi-key"></i></span>
-                <input type="password" class="form-control" v-model="post.password" />
+                <span class="input-group-text" id="inputGroup-sizing-default"
+                  ><i class="bi-key"></i
+                ></span>
+                <input
+                  type="password"
+                  class="form-control"
+                  v-model="post.password"
+                />
               </div>
               <div class="mt-3 d-flex justify-content-center">
-                <button class="btn btn-outline-secondary me-1" type="reset">Reset</button>
+                <button class="btn btn-outline-secondary me-1" type="reset">
+                  Reset
+                </button>
                 <button class="btn btn-primary" type="submit">Login</button>
               </div>
             </form>
@@ -28,6 +38,9 @@
 <script setup>
 import { reactive } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const post = reactive({
   email: "",
@@ -42,8 +55,12 @@ const login = () => {
     })
     .then((result) => {
       console.log(result);
-      post.email = "";
-      post.password = "";
+      localStorage.setItem("accessToken", result.data.data);
+      router.push({
+        name: "home",
+      });
+      // post.email = "";
+      // post.password = "";
     })
     .catch((error) => {
       console.log(error);

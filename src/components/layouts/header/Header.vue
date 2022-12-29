@@ -21,7 +21,9 @@
           </div>
         </li>
         <li class="ms-3 py-2 mt-2"><i class="bi-person me-2"></i> Profile</li>
-        <li class="ms-3 py-2"><i class="bi-box-arrow-right me-2"></i> Logout</li>
+        <li class="ms-3 py-2" @click="logout">
+          <i class="bi-box-arrow-right me-2"></i> Logout
+        </li>
       </template>
     </Account>
   </header>
@@ -30,8 +32,18 @@
 <script setup>
 import { ref } from "vue";
 import Account from "./childs/AccountInfo.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const icon = ref(["bi-bell", "bi-person-circle"]);
+
+const logout = () => {
+  localStorage.removeItem("accessToken");
+  router.push({
+    name: "login",
+  });
+};
 </script>
 
 <style scoped>
