@@ -3,7 +3,7 @@ import Home from "../views/Home.vue";
 import InputTask from "../views/InputTask.vue";
 import Login from "../views/auth/Login.vue";
 import Register from "../views/auth/Register.vue";
-import jwtDecode from "jwt-decode";
+import decodeToken from "../utils/decodeToken.js";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,8 +42,7 @@ router.beforeEach((to, from, next) => {
     next({ name: "login" });
   } else {
     if (accessToken) {
-      const decode = jwtDecode(accessToken);
-      const tokenExpiresAt = decode.exp;
+      const tokenExpiresAt = decodeToken().exp;
       const currentTimestamp = Math.floor(Date.now() / 1000);
       if (tokenExpiresAt > currentTimestamp) {
         next();

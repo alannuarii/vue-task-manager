@@ -15,8 +15,8 @@
               <i class="bi-person-circle"></i>
             </div>
             <div class="col d-flex flex-column justify-content-center">
-              <h5>Alan Nuari</h5>
-              <h6>K3L dan Keamanan</h6>
+              <h5>{{ dataUser.name }}</h5>
+              <h6>{{ dataUser.division }}</h6>
             </div>
           </div>
         </li>
@@ -30,13 +30,23 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import Account from "./childs/AccountInfo.vue";
 import { useRouter } from "vue-router";
+import decodeToken from "../../../utils/decodeToken.js";
 
 const router = useRouter();
 
 const icon = ref(["bi-bell", "bi-person-circle"]);
+
+const dataUser = reactive({
+  id_user: decodeToken().id_user,
+  name: decodeToken().name,
+  email: decodeToken().email,
+  division: decodeToken().division,
+  position: decodeToken().position,
+  task_code: decodeToken().task_code,
+});
 
 const logout = () => {
   localStorage.removeItem("accessToken");
