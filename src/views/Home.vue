@@ -7,5 +7,22 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import Main from "../components/layouts/Main.vue";
+import axios from "axios";
+
+const getUsers = () => {
+  axios
+    .get("http://localhost:8000/")
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+onMounted(() => {
+  getUsers();
+});
 </script>
