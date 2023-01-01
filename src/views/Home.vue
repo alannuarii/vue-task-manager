@@ -13,7 +13,7 @@ import axios from "axios";
 
 const getUsers = () => {
   axios
-    .get("http://localhost:8000/")
+    .get("https://apidatakit.daengveloper.com/")
     .then((result) => {
       console.log(result);
     })
